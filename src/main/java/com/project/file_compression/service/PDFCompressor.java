@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Service
 public class PDFCompressor {
@@ -60,4 +62,41 @@ public class PDFCompressor {
         return compressedStream.toByteArray();
     }
 
+    public byte[] compressToZip(File inputFile) throws IOException {
+        // Output file (ZIP archive)
+        File outputFile = new File(inputFile.getParent(), inputFile.getName() + ".zip");
+
+        // Create the ZIP output stream
+        try (FileOutputStream fos = new FileOutputStream(outputFile);
+             ZipOutputStream zos = new ZipOutputStream(fos);
+             FileInputStream fis = new FileInputStream(inputFile)) {
+
+            // Create a ZIP entry for the input file
+            ZipEntry zipEntry = new ZipEntry(inputFile.getName());
+            zos.putNextEntry(zipEntry);
+
+            // Read the input file and write it to the ZIP entry
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = fis.read(buffer)) != -1) {
+                zos.write(buffer, 0, length);
+            }
+
+            // Close the current ZIP entry
+            zos.closeEntry();
+        }
+
+        // Read the created ZIP file into a byte array
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+             FileInputStream fis = new FileInputStream(outputFile)) {
+
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = fis.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, length);
+            }
+
+            return byteArrayOutputStream.toByteArray(); // Return the ZIP content as a byte array
+        }
+    }
 }

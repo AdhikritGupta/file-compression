@@ -13,6 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/pdf")
@@ -59,9 +63,26 @@ public class PDFController {
 
 
     @GetMapping("/list")
-    public PDFFileList getPdfList() {
-        return pdfFileListService.getAllPDFFiles(); // Retrieve the list of stored PDF files
+    public Map<String, List<Map<String, Object>>> getPdfList() {
+        PDFFileList list = pdfFileListService.getAllPDFFiles();
+
+        List<Map<String, Object>> pdfDetails = new ArrayList<>();
+
+        for (PDFFile pdfFile : list.getPdfFiles()) {
+            Map<String, Object> pdfMap = new HashMap<>();
+            pdfMap.put("id", pdfFile.getId());
+            pdfMap.put("fileName", pdfFile.getFileName());
+            pdfMap.put("contentType", pdfFile.getContentType());
+            pdfMap.put("size", pdfFile.getSize());
+            pdfMap.put("compressionStatus", pdfFile.getCompressionStatus());
+            pdfDetails.add(pdfMap);
+        }
+
+        Map<String, List<Map<String, Object>>> response = new HashMap<>();
+        response.put("pdfFiles", pdfDetails);
+        return response;
     }
+
 
 
     @GetMapping("/file/{index}")
