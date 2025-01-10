@@ -66,23 +66,23 @@ public class PDFCompressor {
         // Output file (ZIP archive)
         File outputFile = new File(inputFile.getParent(), inputFile.getName() + ".zip");
 
-        // Create the ZIP output stream
+
         try (FileOutputStream fos = new FileOutputStream(outputFile);
              ZipOutputStream zos = new ZipOutputStream(fos);
              FileInputStream fis = new FileInputStream(inputFile)) {
 
-            // Create a ZIP entry for the input file
+
             ZipEntry zipEntry = new ZipEntry(inputFile.getName());
             zos.putNextEntry(zipEntry);
 
-            // Read the input file and write it to the ZIP entry
+
             byte[] buffer = new byte[1024];
             int length;
             while ((length = fis.read(buffer)) != -1) {
                 zos.write(buffer, 0, length);
             }
 
-            // Close the current ZIP entry
+
             zos.closeEntry();
         }
 
@@ -96,7 +96,7 @@ public class PDFCompressor {
                 byteArrayOutputStream.write(buffer, 0, length);
             }
 
-            return byteArrayOutputStream.toByteArray(); // Return the ZIP content as a byte array
+            return byteArrayOutputStream.toByteArray();
         }
     }
 }
