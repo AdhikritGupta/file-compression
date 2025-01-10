@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/rarpdf")
+@RequestMapping("/rarpdf/{username}")
 public class RarPDFController {
 
     @Autowired
@@ -31,7 +31,7 @@ public class RarPDFController {
     private PDFFileListService pdfFileListService;
 
     @PostMapping("/compress")
-    public String compressToRar(@RequestParam("file") MultipartFile file) {
+    public String compressToRar(@PathVariable String username, @RequestParam("file") MultipartFile file) {
         try {
             File tempFile = new File(System.getProperty("java.io.tmpdir"), file.getOriginalFilename());
             file.transferTo(tempFile);
@@ -43,8 +43,9 @@ public class RarPDFController {
             int fid = pdfFileListService.getAllRARFiles().getRarFiles().size();
             ZIPFile ZIPFile = new ZIPFile(
                     fid++,
+                    username,
                     file.getOriginalFilename() + ".zip",
-                    "application/vnd.rar",
+                    "application/vnd.zip",
                     compressedContent.length,
                     compressedContent,
                     "compressed"
@@ -72,6 +73,7 @@ public class RarPDFController {
             rarMap.put("contentType", ZIPFile.getContentType());
             rarMap.put("size", ZIPFile.getSize());
             rarMap.put("compressionStatus", ZIPFile.getCompressionStatus());
+            rarMap.put("username", ZIPFile.getUsername());
             rarDetails.add(rarMap);
         }
 

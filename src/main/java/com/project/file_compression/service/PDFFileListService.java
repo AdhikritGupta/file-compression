@@ -4,6 +4,9 @@ import com.project.file_compression.model.PDFFile;
 import com.project.file_compression.model.PDFFileList;
 import com.project.file_compression.model.ZIPFile;
 import com.project.file_compression.model.ZIPFileList;
+import com.project.file_compression.repository.PDFFileRepository;
+import com.project.file_compression.repository.ZIPFileRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,10 +14,15 @@ public class PDFFileListService {
 
     PDFFileList pdfFileList = new PDFFileList(); // In-memory list of PDFFile objects
     ZIPFileList ZIPFileList = new ZIPFileList(); // In-memory list of RARFile objects
+    @Autowired
+    private PDFFileRepository pdfFileRepository;
 
+    @Autowired
+    private ZIPFileRepository zipFileRepository;
 
     public void addPDFFile(PDFFile pdfFile) {
         pdfFileList.addPDFFile(pdfFile);
+        pdfFileRepository.save(pdfFile);
     }
 
 
@@ -33,6 +41,7 @@ public class PDFFileListService {
 
     public void addRARFile(ZIPFile ZIPFile) {
         ZIPFileList.addRARFile(ZIPFile);
+        zipFileRepository.save(ZIPFile);
     }
 
 

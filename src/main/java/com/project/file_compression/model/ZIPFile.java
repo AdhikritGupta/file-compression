@@ -1,19 +1,43 @@
 package com.project.file_compression.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Arrays;
+
+@Document(collection = "zip_files")
 public class ZIPFile {
 
+    @Id
     private int id;
+    private String username;
     private String fileName;
+
+    @Override
+    public String toString() {
+        return "ZIPFile{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", fileName='" + fileName + '\'' +
+                ", contentType='" + contentType + '\'' +
+                ", size=" + size +
+                ", content=" + Arrays.toString(content) +
+                ", compressionStatus='" + compressionStatus + '\'' +
+                '}';
+    }
+
     private String contentType;
     private long size;
     private byte[] content;
     private String compressionStatus;
 
-    public ZIPFile() {
+    public ZIPFile(String username) {
+        this.username = username;
     }
 
-    public ZIPFile(int id, String fileName, String contentType, long size, byte[] content, String compressionStatus) {
+    public ZIPFile(int id, String username, String fileName, String contentType, long size, byte[] content, String compressionStatus) {
         this.id = id;
+        this.username = username;
         this.fileName = fileName;
         this.contentType = contentType;
         this.size = size;
@@ -69,14 +93,11 @@ public class ZIPFile {
         this.compressionStatus = compressionStatus;
     }
 
-    @Override
-    public String toString() {
-        return "RARFile{" +
-                "id=" + id +
-                ", fileName='" + fileName + '\'' +
-                ", contentType='" + contentType + '\'' +
-                ", size=" + size +
-                ", compressionStatus='" + compressionStatus + '\'' +
-                '}';
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

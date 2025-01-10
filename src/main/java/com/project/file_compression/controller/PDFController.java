@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/pdf")
+@RequestMapping("/pdf/{username}")
 public class PDFController {
 
     @Autowired
@@ -30,7 +30,7 @@ public class PDFController {
 
 
     @PostMapping("/compress")
-    public String compressPDF(@RequestParam("file") MultipartFile file) {
+    public String compressPDF(@PathVariable String username, @RequestParam("file") MultipartFile file) {
         try {
 
             File tempFile = new File(System.getProperty("java.io.tmpdir"), file.getOriginalFilename());
@@ -43,6 +43,7 @@ public class PDFController {
             int fid = pdfFileListService.getAllPDFFiles().getPdfFiles().size();
             PDFFile compressedPDF = new PDFFile(
                     fid++,
+                    username,
                     file.getOriginalFilename(),
                     "application/pdf",
                     compressedContent.length,
@@ -71,6 +72,7 @@ public class PDFController {
         for (PDFFile pdfFile : list.getPdfFiles()) {
             Map<String, Object> pdfMap = new HashMap<>();
             pdfMap.put("id", pdfFile.getId());
+            pdfMap.put("username", pdfFile.getUsername());
             pdfMap.put("fileName", pdfFile.getFileName());
             pdfMap.put("contentType", pdfFile.getContentType());
             pdfMap.put("size", pdfFile.getSize());
