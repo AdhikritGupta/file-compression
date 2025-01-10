@@ -1,6 +1,6 @@
 package com.project.file_compression.model;
 
-public class RARFile {
+public class ZIPFile {
 
     private int id;
     private String fileName;
@@ -9,10 +9,10 @@ public class RARFile {
     private byte[] content;
     private String compressionStatus;
 
-    public RARFile() {
+    public ZIPFile() {
     }
 
-    public RARFile(int id, String fileName, String contentType, long size, byte[] content, String compressionStatus) {
+    public ZIPFile(int id, String fileName, String contentType, long size, byte[] content, String compressionStatus) {
         this.id = id;
         this.fileName = fileName;
         this.contentType = contentType;

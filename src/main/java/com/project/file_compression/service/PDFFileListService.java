@@ -2,15 +2,15 @@ package com.project.file_compression.service;
 
 import com.project.file_compression.model.PDFFile;
 import com.project.file_compression.model.PDFFileList;
-import com.project.file_compression.model.RARFile;
-import com.project.file_compression.model.RARFileList;
+import com.project.file_compression.model.ZIPFile;
+import com.project.file_compression.model.ZIPFileList;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PDFFileListService {
 
     PDFFileList pdfFileList = new PDFFileList(); // In-memory list of PDFFile objects
-    RARFileList rarFileList = new RARFileList(); // In-memory list of RARFile objects
+    ZIPFileList ZIPFileList = new ZIPFileList(); // In-memory list of RARFile objects
 
 
     public void addPDFFile(PDFFile pdfFile) {
@@ -31,18 +31,18 @@ public class PDFFileListService {
     }
 
 
-    public void addRARFile(RARFile rarFile) {
-        rarFileList.addRARFile(rarFile);
+    public void addRARFile(ZIPFile ZIPFile) {
+        ZIPFileList.addRARFile(ZIPFile);
     }
 
 
-    public RARFileList getAllRARFiles() {
-        return rarFileList;
+    public ZIPFileList getAllRARFiles() {
+        return ZIPFileList;
     }
 
-    public RARFile getRARFile(int index) {
-        if (index >= 0 && index < rarFileList.getRarFiles().size()) {
-            return rarFileList.getRarFiles().get(index);
+    public ZIPFile getRARFile(int index) {
+        if (index >= 0 && index < ZIPFileList.getRarFiles().size()) {
+            return ZIPFileList.getRarFiles().get(index);
         }
         return null;
     }
