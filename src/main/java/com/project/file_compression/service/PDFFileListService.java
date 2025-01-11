@@ -9,6 +9,8 @@ import com.project.file_compression.repository.ZIPFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PDFFileListService {
 
@@ -40,18 +42,18 @@ public class PDFFileListService {
 
 
     public void addRARFile(ZIPFile ZIPFile) {
-        ZIPFileList.addRARFile(ZIPFile);
+        ZIPFileList.addZIPFile(ZIPFile);
         zipFileRepository.save(ZIPFile);
     }
 
 
-    public ZIPFileList getAllRARFiles() {
-        return ZIPFileList;
+    public List<ZIPFile> getAllZIPFiles() {
+        return zipFileRepository.findAll();
     }
 
-    public ZIPFile getRARFile(int index) {
-        if (index >= 0 && index < ZIPFileList.getRarFiles().size()) {
-            return ZIPFileList.getRarFiles().get(index);
+    public ZIPFile getZIPFile(int index) {
+        if (index >= 0 && index < ZIPFileList.getZIPFiles().size()) {
+            return zipFileRepository.findById(index).get();
         }
         return null;
     }

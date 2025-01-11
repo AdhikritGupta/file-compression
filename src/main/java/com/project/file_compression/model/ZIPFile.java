@@ -1,5 +1,6 @@
 package com.project.file_compression.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,6 +13,14 @@ public class ZIPFile {
     private int id;
     private String username;
     private String fileName;
+
+    private String contentType;
+    private long size;
+
+    @JsonIgnore
+    private byte[] content;
+    private String compressionStatus;
+
 
     @Override
     public String toString() {
@@ -26,13 +35,7 @@ public class ZIPFile {
                 '}';
     }
 
-    private String contentType;
-    private long size;
-    private byte[] content;
-    private String compressionStatus;
-
-    public ZIPFile(String username) {
-        this.username = username;
+    public ZIPFile() {
     }
 
     public ZIPFile(int id, String username, String fileName, String contentType, long size, byte[] content, String compressionStatus) {

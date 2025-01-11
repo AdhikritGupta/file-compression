@@ -1,7 +1,6 @@
 package com.project.file_compression.controller;
 
 import com.project.file_compression.model.ZIPFile;
-import com.project.file_compression.model.ZIPFileList;
 import com.project.file_compression.service.PDFCompressor;
 import com.project.file_compression.service.PDFFileListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,20 +14,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/rarpdf/{username}")
-public class RarPDFController {
+public class ZipPDFController {
 
     @Autowired
     private PDFCompressor pdfCompressor;
 
     @Autowired
     private PDFFileListService pdfFileListService;
+
+    int fid=0;
 
     @PostMapping("/compress")
     public String compressToRar(@PathVariable String username, @RequestParam("file") MultipartFile file) {
@@ -40,12 +38,11 @@ public class RarPDFController {
             byte[] compressedContent = pdfCompressor.compressToZip(tempFile);
 
 
-            int fid = pdfFileListService.getAllRARFiles().getRarFiles().size();
             ZIPFile ZIPFile = new ZIPFile(
                     fid++,
                     username,
                     file.getOriginalFilename() + ".zip",
-                    "application/vnd.zip",
+                    "application/zip",
                     compressedContent.length,
                     compressedContent,
                     "compressed"
@@ -61,36 +58,36 @@ public class RarPDFController {
     }
 
     @GetMapping("/list")
-    public Map<String, List<Map<String, Object>>> getRarFileList() {
-        ZIPFileList list = pdfFileListService.getAllRARFiles();
+    public List<ZIPFile> getRarFileList() {
+        return pdfFileListService.getAllZIPFiles();
 
-        List<Map<String, Object>> rarDetails = new ArrayList<>();
-
-        for (ZIPFile ZIPFile : list.getRarFiles()) {
-            Map<String, Object> rarMap = new HashMap<>();
-            rarMap.put("id", ZIPFile.getId());
-            rarMap.put("fileName", ZIPFile.getFileName());
-            rarMap.put("contentType", ZIPFile.getContentType());
-            rarMap.put("size", ZIPFile.getSize());
-            rarMap.put("compressionStatus", ZIPFile.getCompressionStatus());
-            rarMap.put("username", ZIPFile.getUsername());
-            rarDetails.add(rarMap);
-        }
-
-        Map<String, List<Map<String, Object>>> response = new HashMap<>();
-        response.put("zipFiles", rarDetails);
-        return response;
+//        List<Map<String, Object>> rarDetails = new ArrayList<>();
+//
+//        for (ZIPFile ZIPFile : list.getRarFiles()) {
+//            Map<String, Object> rarMap = new HashMap<>();
+//            rarMap.put("id", ZIPFile.getId());
+//            rarMap.put("fileName", ZIPFile.getFileName());
+//            rarMap.put("contentType", ZIPFile.getContentType());
+//            rarMap.put("size", ZIPFile.getSize());
+//            rarMap.put("compressionStatus", ZIPFile.getCompressionStatus());
+//            rarMap.put("username", ZIPFile.getUsername());
+//            rarDetails.add(rarMap);
+//        }
+//
+//        Map<String, List<Map<String, Object>>> response = new HashMap<>();
+//        response.put("zipFiles", rarDetails);
+//        return response;
     }
 
     @GetMapping("/file/{index}")
-    public ZIPFile getRarFile(@PathVariable int index) {
-        return pdfFileListService.getRARFile(index);
+    public ZIPFile getZIPFile(@PathVariable int index) {
+        return pdfFileListService.getZIPFile(index);
     }
 
     @GetMapping("/viewrar/{index}")
     public ResponseEntity<byte[]> viewRarFile(@PathVariable int index) {
         try {
-            ZIPFile ZIPFile = pdfFileListService.getRARFile(index);
+            ZIPFile ZIPFile = pdfFileListService.getZIPFile(index);
 
             if (ZIPFile == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -113,7 +110,7 @@ public class RarPDFController {
     @GetMapping("/view/{index}")
     public ResponseEntity<byte[]> viewUnzippedPDFFile(@PathVariable int index) {
         try {
-            ZIPFile ZIPFile = pdfFileListService.getRARFile(index);
+            ZIPFile ZIPFile = pdfFileListService.getZIPFile(index);
 
             if (ZIPFile == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

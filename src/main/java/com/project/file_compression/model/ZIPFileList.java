@@ -11,11 +11,11 @@ public class ZIPFileList {
         this.ZIPFiles = new ArrayList<>();
     }
 
-    public void addRARFile(ZIPFile ZIPFile) {
+    public void addZIPFile(ZIPFile ZIPFile) {
         this.ZIPFiles.add(ZIPFile);
     }
 
-    public List<ZIPFile> getRarFiles() {
+    public List<ZIPFile> getZIPFiles() {
         return ZIPFiles;
     }
 
@@ -25,8 +25,8 @@ public class ZIPFileList {
 
     @Override
     public String toString() {
-        return "RARFileList{" +
-                "rarFiles=" + ZIPFiles +
+        return "ZIPFileList{" +
+                "zipFiles=" + ZIPFiles +
                 '}';
     }
 }
