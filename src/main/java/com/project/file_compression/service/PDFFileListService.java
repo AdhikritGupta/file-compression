@@ -42,7 +42,7 @@ public class PDFFileListService {
 
 
     public void addRARFile(ZIPFile ZIPFile) {
-        ZIPFileList.addZIPFile(ZIPFile);
+//        ZIPFileList.addZIPFile(ZIPFile);
         zipFileRepository.save(ZIPFile);
     }
 

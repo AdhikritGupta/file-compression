@@ -50,7 +50,7 @@ public class ZipPDFController {
 
             pdfFileListService.addRARFile(ZIPFile);
 
-            return "File successfully compressed to RAR and stored in the list.";
+            return "File successfully compressed and stored in the list.";
         } catch (IOException e) {
             e.printStackTrace();
             return "Error compressing file to RAR: " + e.getMessage();
