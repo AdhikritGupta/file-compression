@@ -52,9 +52,13 @@ public class PDFFileListService {
     }
 
     public ZIPFile getZIPFile(int index) {
-        if (index >= 0 && index < ZIPFileList.getZIPFiles().size()) {
+        if (index >= 0 && index < this.getTotalZIPFiles()) {
             return zipFileRepository.findById(index).get();
         }
         return null;
+    }
+
+    public int getTotalZIPFiles() {
+        return (int) zipFileRepository.count();
     }
 }
